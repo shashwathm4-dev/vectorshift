@@ -1,0 +1,40 @@
+{
+  "type": "api",
+  "title": "API / Webhook",
+  "icon": "🌐",
+  "category": "integration",
+  "inputs": [
+    { "id": "body", "label": "Body", "dataType": "text" }
+  ],
+  "outputs": [
+    { "id": "response", "label": "Response", "dataType": "text" }
+  ],
+  "fields": [
+    {
+      "key": "url",
+      "label": "URL",
+      "type": "text",
+      "required": true,
+      "placeholder": "https://api.example.com"
+    },
+    {
+      "key": "method",
+      "label": "Method",
+      "type": "select",
+      "defaultValue": "GET",
+      "options": [
+        { "value": "GET", "label": "GET" },
+        { "value": "POST", "label": "POST" },
+        { "value": "PUT", "label": "PUT" },
+        { "value": "DELETE", "label": "DELETE" }
+      ]
+    },
+    {
+      "key": "headers",
+      "label": "Headers",
+      "type": "textarea",
+      "placeholder": "{\"Content-Type\": \"application/json\"}",
+      "rows": 2
+    }
+  ]
+}

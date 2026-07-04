@@ -1,0 +1,11 @@
+{
+  "type": "text",
+  "title": "Text",
+  "icon": "📝",
+  "category": "transform",
+  "inputs": [],
+  "outputs": [
+    { "id": "output", "label": "Output", "dataType": "text" }
+  ],
+  "fields": []
+}

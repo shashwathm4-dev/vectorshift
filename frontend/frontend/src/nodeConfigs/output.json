@@ -1,0 +1,29 @@
+{
+  "type": "customOutput",
+  "title": "Output",
+  "icon": "📤",
+  "category": "io",
+  "inputs": [
+    { "id": "value", "label": "Value", "dataType": "text" }
+  ],
+  "outputs": [],
+  "fields": [
+    {
+      "key": "outputName",
+      "label": "Name",
+      "type": "text",
+      "required": true,
+      "defaultPattern": "output_"
+    },
+    {
+      "key": "outputType",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "Text",
+      "options": [
+        { "value": "Text", "label": "Text" },
+        { "value": "Image", "label": "Image" }
+      ]
+    }
+  ]
+}

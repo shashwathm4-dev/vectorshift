@@ -1,0 +1,22 @@
+{
+  "type": "branch",
+  "title": "Branch",
+  "icon": "🔀",
+  "category": "logic",
+  "inputs": [
+    { "id": "value", "label": "Value", "dataType": "any" }
+  ],
+  "outputs": [
+    { "id": "true", "label": "True", "dataType": "any" },
+    { "id": "false", "label": "False", "dataType": "any" }
+  ],
+  "fields": [
+    {
+      "key": "condition",
+      "label": "Condition",
+      "type": "text",
+      "required": true,
+      "placeholder": "value > 10"
+    }
+  ]
+}

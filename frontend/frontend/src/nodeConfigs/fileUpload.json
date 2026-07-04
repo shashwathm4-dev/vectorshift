@@ -1,0 +1,32 @@
+{
+  "type": "fileUpload",
+  "title": "File Upload",
+  "icon": "📁",
+  "category": "io",
+  "inputs": [],
+  "outputs": [
+    { "id": "file", "label": "File", "dataType": "document" }
+  ],
+  "fields": [
+    {
+      "key": "acceptedTypes",
+      "label": "Accepted Types",
+      "type": "select",
+      "defaultValue": "any",
+      "options": [
+        { "value": "any", "label": "Any" },
+        { "value": "image", "label": "Images" },
+        { "value": "document", "label": "Documents" },
+        { "value": "csv", "label": "CSV / Spreadsheet" }
+      ]
+    },
+    {
+      "key": "maxSizeMB",
+      "label": "Max Size (MB)",
+      "type": "number",
+      "defaultValue": 10,
+      "min": 1,
+      "max": 100
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "type": "math",
+  "title": "Math",
+  "icon": "🔢",
+  "category": "transform",
+  "inputs": [
+    { "id": "a", "label": "A", "dataType": "number" },
+    { "id": "b", "label": "B", "dataType": "number" }
+  ],
+  "outputs": [
+    { "id": "result", "label": "Result", "dataType": "number" }
+  ],
+  "fields": [
+    {
+      "key": "operation",
+      "label": "Operation",
+      "type": "select",
+      "defaultValue": "add",
+      "options": [
+        { "value": "add", "label": "Add (+)" },
+        { "value": "subtract", "label": "Subtract (−)" },
+        { "value": "multiply", "label": "Multiply (×)" },
+        { "value": "divide", "label": "Divide (÷)" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "type": "customInput",
+  "title": "Input",
+  "icon": "📥",
+  "category": "io",
+  "inputs": [],
+  "outputs": [
+    { "id": "value", "label": "Value", "dataType": "text" }
+  ],
+  "fields": [
+    {
+      "key": "inputName",
+      "label": "Name",
+      "type": "text",
+      "required": true,
+      "defaultPattern": "input_"
+    },
+    {
+      "key": "inputType",
+      "label": "Type",
+      "type": "select",
+      "defaultValue": "Text",
+      "options": [
+        { "value": "Text", "label": "Text" },
+        { "value": "File", "label": "File" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "llm",
+  "title": "LLM",
+  "icon": "🤖",
+  "category": "ai",
+  "inputs": [
+    { "id": "system", "label": "System", "dataType": "text" },
+    { "id": "prompt", "label": "Prompt", "dataType": "text" }
+  ],
+  "outputs": [
+    { "id": "response", "label": "Response", "dataType": "text" }
+  ],
+  "fields": [
+    {
+      "key": "description",
+      "label": "",
+      "type": "static",
+      "content": "This is a LLM."
+    }
+  ]
+}

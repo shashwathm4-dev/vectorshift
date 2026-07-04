@@ -1,0 +1,45 @@
+{
+  "type": "portfolioAlert",
+  "title": "Portfolio Alert",
+  "icon": "🔔",
+  "category": "integration",
+  "inputs": [
+    { "id": "portfolio", "label": "Portfolio", "dataType": "document" },
+    { "id": "threshold", "label": "Threshold", "dataType": "number" }
+  ],
+  "outputs": [
+    { "id": "alert", "label": "Alert", "dataType": "text" },
+    { "id": "triggered", "label": "Triggered", "dataType": "boolean" }
+  ],
+  "fields": [
+    {
+      "key": "alertName",
+      "label": "Alert Name",
+      "type": "text",
+      "required": true,
+      "placeholder": "e.g. Drawdown > 5%"
+    },
+    {
+      "key": "metric",
+      "label": "Metric",
+      "type": "select",
+      "defaultValue": "drawdown",
+      "options": [
+        { "value": "drawdown", "label": "Max Drawdown" },
+        { "value": "volatility", "label": "Volatility" },
+        { "value": "sharpe", "label": "Sharpe Ratio" },
+        { "value": "pnl", "label": "P&L Change" }
+      ]
+    },
+    {
+      "key": "direction",
+      "label": "Direction",
+      "type": "select",
+      "defaultValue": "below",
+      "options": [
+        { "value": "above", "label": "Above Threshold" },
+        { "value": "below", "label": "Below Threshold" }
+      ]
+    }
+  ]
+}
