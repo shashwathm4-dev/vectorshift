@@ -1,11 +1,11 @@
 // ui.js
 // Pipeline editor canvas with React Flow.
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import ReactFlow, { Controls, Background, MiniMap } from 'reactflow';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
-import { nodeTypes } from './nodes/nodeRegistry';
+import { createNodeTypes } from './nodes/nodeRegistry';
 import { Toast } from './components/Toast';
 
 import 'reactflow/dist/style.css';
@@ -23,6 +23,8 @@ const selector = (state) => ({
   onConnect: state.onConnect,
   connectionError: state.connectionError,
   clearConnectionError: state.clearConnectionError,
+  configs: state.configs,
+  connectNodeConfigsSSE: state.connectNodeConfigsSSE,
 });
 
 export const PipelineUI = () => {
@@ -38,7 +40,20 @@ export const PipelineUI = () => {
     onConnect,
     connectionError,
     clearConnectionError,
+    configs,
+    connectNodeConfigsSSE,
   } = useStore(selector, shallow);
+
+  // Maintain real-time Server-Sent Events (SSE) connection to pick up config updates instantly
+  useEffect(() => {
+    const disconnect = connectNodeConfigsSSE();
+    return () => disconnect();
+  }, [connectNodeConfigsSSE]);
+
+  // Compute node types dynamically from fetched server configs
+  const nodeTypes = useMemo(() => {
+    return createNodeTypes(configs);
+  }, [configs]);
 
   const getInitNodeData = (nodeID, type) => ({
     id: nodeID,
@@ -104,7 +119,7 @@ export const PipelineUI = () => {
           <MiniMap
             nodeStrokeColor="#6366f1"
             nodeColor="#1e293b"
-            nodeBorderRadius={8}
+            nodeBorderBorder={8}
             maskColor="rgba(15, 23, 42, 0.7)"
           />
         </ReactFlow>

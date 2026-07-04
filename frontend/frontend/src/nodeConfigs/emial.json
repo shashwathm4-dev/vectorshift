@@ -1,0 +1,61 @@
+{
+    "type": "emailSender",
+    "title": "Send Email",
+    "icon": "✉️",
+    "category": "integration",
+    "inputs": [
+        {
+            "id": "body",
+            "label": "Body",
+            "dataType": "text"
+        },
+        {
+            "id": "attachment",
+            "label": "Attachment",
+            "dataType": "document"
+        }
+    ],
+    "outputs": [
+        {
+            "id": "sent",
+            "label": "Sent",
+            "dataType": "boolean"
+        }
+    ],
+    "fields": [
+        {
+            "key": "to",
+            "label": "To",
+            "type": "text",
+            "required": true,
+            "placeholder": "recipient@example.com"
+        },
+        {
+            "key": "subject",
+            "label": "Subject",
+            "type": "text",
+            "required": true,
+            "placeholder": "Email subject"
+        },
+        {
+            "key": "priority",
+            "label": "Priority",
+            "type": "select",
+            "defaultValue": "normal",
+            "options": [
+                {
+                    "value": "low",
+                    "label": "Low"
+                },
+                {
+                    "value": "normal",
+                    "label": "Normal"
+                },
+                {
+                    "value": "high",
+                    "label": "High"
+                }
+            ]
+        }
+    ]
+}

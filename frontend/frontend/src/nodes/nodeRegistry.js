@@ -1,10 +1,9 @@
 // nodeRegistry.js
-// Auto-generates React Flow nodeTypes and toolbar items from JSON configs.
-// No node type is registered by hand — everything flows from nodeConfigs/.
+// Dynamically generates React Flow nodeTypes from configurations.
+// No node type is registered by hand — everything is configuration-driven.
 
 import React from 'react';
 import { BaseNode } from '../components/BaseNode';
-import { configs, NODE_CONFIGS } from '../nodeConfigs';
 import { TextNode } from './textNode';
 
 /**
@@ -29,24 +28,13 @@ const COMPONENT_OVERRIDES = {
 };
 
 /**
- * nodeTypes map for React Flow — populated entirely from JSON configs.
+ * Generates the nodeTypes map dynamically for React Flow.
  */
-export const nodeTypes = Object.fromEntries(
-  configs.map((config) => [
-    config.type,
-    COMPONENT_OVERRIDES[config.type] || createNodeComponent(config),
-  ])
-);
-
-/**
- * Toolbar items derived from JSON configs.
- */
-export const toolbarItems = configs.map((config) => ({
-  type: config.type,
-  label: config.title,
-  icon: config.icon,
-  category: config.category,
-}));
-
-// Re-export for consumers that need the config map
-export { NODE_CONFIGS };
+export const createNodeTypes = (configs) => {
+  return Object.fromEntries(
+    configs.map((config) => [
+      config.type,
+      COMPONENT_OVERRIDES[config.type] || createNodeComponent(config),
+    ])
+  );
+};

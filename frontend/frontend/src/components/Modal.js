@@ -3,6 +3,13 @@
 
 import React from 'react';
 
+const ISSUE_META = {
+  cycle: { icon: '🔄', color: 'warning', label: 'Cycle Detected' },
+  unreachable_output: { icon: '🔌', color: 'error', label: 'Unreachable Output' },
+  disconnected_node: { icon: '⚡', color: 'error', label: 'Disconnected Node' },
+  error: { icon: '❌', color: 'error', label: 'Error' },
+};
+
 export const Modal = ({ isOpen, onClose, data }) => {
   if (!isOpen || !data) return null;
 
@@ -36,25 +43,24 @@ export const Modal = ({ isOpen, onClose, data }) => {
           {/* Issues list */}
           {hasIssues && (
             <div className="modal-issues">
-              <h3 className="modal-issues-title">Issues Found</h3>
+              <h3 className="modal-issues-title">
+                {data.issues.length} Issue{data.issues.length > 1 ? 's' : ''} Found
+              </h3>
               <ul className="modal-issues-list">
-                {data.issues.map((issue, idx) => (
-                  <li key={idx} className={`modal-issue modal-issue-${issue.type}`}>
-                    <span className="modal-issue-icon">
-                      {issue.type === 'cycle' ? '🔄' : '⚡'}
-                    </span>
-                    <div className="modal-issue-content">
-                      <strong className="modal-issue-type">
-                        {issue.type === 'cycle' ? 'Cycle Detected' : 'Unreachable Output'}
-                      </strong>
-                      <span className="modal-issue-detail">
-                        {issue.type === 'cycle'
-                          ? `Edge: ${issue.edge[0]} → ${issue.edge[1]}`
-                          : `Node: ${issue.node}`}
-                      </span>
-                    </div>
-                  </li>
-                ))}
+                {data.issues.map((issue, idx) => {
+                  const meta = ISSUE_META[issue.type] || ISSUE_META.error;
+                  return (
+                    <li key={idx} className={`modal-issue modal-issue-${meta.color}`}>
+                      <span className="modal-issue-icon">{meta.icon}</span>
+                      <div className="modal-issue-content">
+                        <strong className="modal-issue-type">{meta.label}</strong>
+                        <span className="modal-issue-detail">
+                          {issue.message || (issue.node ? `Node: ${issue.node}` : 'Unknown issue')}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

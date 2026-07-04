@@ -1,5 +1,5 @@
 // store.js
-// Zustand store with typed handle connection validation and edge cleanup.
+// Zustand store with typed handle connection validation, dynamic config fetching, and edge cleanup.
 
 import { create } from 'zustand';
 import {
@@ -8,7 +8,6 @@ import {
   applyEdgeChanges,
   MarkerType,
 } from 'reactflow';
-import { NODE_CONFIGS } from './nodeConfigs';
 import { getHandleType, areTypesCompatible } from './utils/handleTypes';
 
 // Default sample pipeline so the canvas isn't empty on first load
@@ -77,6 +76,58 @@ export const useStore = create((set, get) => ({
   edges: DEFAULT_EDGES,
   nodeIDs: { customInput: 1, text: 1, llm: 1, customOutput: 1 },
   connectionError: null,
+  
+  // Dynamic JSON configs fetched from backend
+  configs: [],
+  nodeConfigs: {},
+  loadingConfigs: true,
+
+  fetchNodeConfigs: async () => {
+    try {
+      set({ loadingConfigs: true });
+      const response = await fetch('http://localhost:8000/pipelines/node-configs');
+      if (!response.ok) throw new Error('Failed to fetch node configs');
+      const data = await response.json();
+      
+      const configMap = Object.fromEntries(data.map((cfg) => [cfg.type, cfg]));
+      set({
+        configs: data,
+        nodeConfigs: configMap,
+        loadingConfigs: false,
+      });
+    } catch (err) {
+      console.error('Error fetching node configurations:', err);
+      set({ loadingConfigs: false });
+    }
+  },
+
+  connectNodeConfigsSSE: () => {
+    const eventSource = new EventSource('http://localhost:8000/pipelines/node-configs/stream');
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const configMap = Object.fromEntries(data.map((cfg) => [cfg.type, cfg]));
+        set({
+          configs: data,
+          nodeConfigs: configMap,
+          loadingConfigs: false,
+        });
+      } catch (err) {
+        console.error('Error parsing SSE configurations:', err);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error('SSE connection error:', err);
+      // Fallback to static fetch once if SSE fails
+      get().fetchNodeConfigs();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  },
 
   getNodeID: (type) => {
     const newIDs = { ...get().nodeIDs };
@@ -111,19 +162,19 @@ export const useStore = create((set, get) => ({
    * Looks up source and target handle types. Blocks mismatched connections.
    */
   onConnect: (connection) => {
-    const { nodes } = get();
+    const { nodes, nodeConfigs } = get();
 
     const sourceType = getHandleType(
       connection.source,
       connection.sourceHandle,
       nodes,
-      NODE_CONFIGS
+      nodeConfigs
     );
     const targetType = getHandleType(
       connection.target,
       connection.targetHandle,
       nodes,
-      NODE_CONFIGS
+      nodeConfigs
     );
 
     if (!areTypesCompatible(sourceType, targetType)) {

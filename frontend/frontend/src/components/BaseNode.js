@@ -66,7 +66,6 @@ export const BaseNode = ({ config, id, data, selected, renderBody }) => {
         if (field.defaultValue !== undefined) {
           updateNodeField(id, field.key, field.defaultValue);
         } else if (field.defaultPattern) {
-          // JSON-friendly ID-derived default: "input_" + numeric suffix from node ID
           const suffix = id.replace(/^.*-/, '');
           updateNodeField(id, field.key, `${field.defaultPattern}${suffix}`);
         }
@@ -77,9 +76,17 @@ export const BaseNode = ({ config, id, data, selected, renderBody }) => {
 
   const validationClass = isValid ? 'valid' : 'invalid';
   const selectedClass = selected ? 'selected' : '';
+  const categoryClass = `node-cat-${config.category || 'default'}`;
+
+  // Ensure the node has enough height to space out handles vertically and avoid label overlapping
+  const maxHandles = Math.max(allInputs.length, outputs.length);
+  const dynamicMinHeight = maxHandles > 1 ? 40 + maxHandles * 36 : undefined;
 
   return (
-    <div className={`base-node ${validationClass} ${selectedClass}`}>
+    <div
+      className={`base-node ${validationClass} ${selectedClass} ${categoryClass}`}
+      style={dynamicMinHeight ? { minHeight: dynamicMinHeight } : undefined}
+    >
       {/* Header */}
       <div className="base-node-header">
         {config.icon && <span className="base-node-icon">{config.icon}</span>}
