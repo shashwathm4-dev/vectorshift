@@ -137,6 +137,16 @@ def detect_structural_issues(
     # Determine which node types are "source" types (no expected inputs)
     SOURCE_TYPES = {"customInput", "fileUpload"}
 
+    # Text nodes only have inputs if they declared {{variables}}; a Text node with
+    # zero dynamic inputs has nothing to connect to by design and isn't "disconnected".
+    node_input_counts: dict[str, int | None] = {}
+    for node in nodes:
+        nid = node.get("id", "")
+        ntype = node.get("type", "")
+        data = node.get("data", {})
+        dynamic_inputs = data.get("dynamicInputs", []) if isinstance(data, dict) else []
+        node_input_counts[nid] = len(dynamic_inputs) if ntype == "text" else None
+
     # Build set of nodes that have at least one incoming edge
     nodes_with_incoming: set[str] = set()
     for edge in edges:
@@ -161,6 +171,8 @@ def detect_structural_issues(
             )
         # Non-source node with zero inputs (not already caught above)
         elif ntype not in SOURCE_TYPES and nid not in nodes_with_incoming:
+            if ntype == "text" and node_input_counts.get(nid) == 0:
+                continue
             if ntype != "customOutput":  # Avoid duplicate
                 issues.append(
                     Issue(
